@@ -1,0 +1,79 @@
+http:
+  routers:
+    # Force HTTPS     
+    router-http-nextcloud:
+      rule: "Host(`nextcloud.example.com`)"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "redirect-to-https" 
+      service: "nextcloud"
+    router-http-qnap:
+      rule: "Host(`qnap.example.com`)"
+      entryPoints:
+        - "web"
+      middlewares:
+        - "redirect-to-https" 
+      service: "qnap"
+
+    router-nextcloud:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`nextcloud.example.com`)"
+      tls:
+        certResolver: myresolver
+      service: "nextcloud"  
+
+    router-qnap:
+      entryPoints:
+        - "websecure"
+      rule: "Host(`qnap.example.com`)"
+      tls:
+        certResolver: myresolver
+      service: "qnap"  
+    
+  middlewares:
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  services:
+    nextcloud:
+      loadBalancer:
+        servers:
+        - url: "http://<server-ip>:30080"    
+        
+    qnap:
+      loadBalancer:
+        servers:
+        - url: "http://<server-ip>:8080"
+        
+# If you rather use qnap and nextcloud HTTPS than Traefik
+#tcp:
+#  routers:
+#    router-qnap-https:
+#      entryPoints:
+#        - "websecure"
+#      rule: "HostSNI(`qnap.example.com`)"
+#      tls:
+#        passthrough: true
+#      service: "qnap-https"
+#    
+#    router-nextcloud-https:
+#      entryPoints:
+#        - "websecure"
+#      rule: "HostSNI(`nextcloud.example.com`)"
+#      tls:
+#        passthrough: true
+#      service: "nextcloud-https"
+#
+#  services:
+#    qnap-https:
+#      loadBalancer:
+#        servers:
+#        - address: "192.168.0.81:443"
+#    nextcloud-https:
+#      loadBalancer:
+#        servers:
+#        - address: "192.168.0.82:443"
