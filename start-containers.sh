@@ -2,6 +2,7 @@
 # Having evrything in a docker-compose would be cleaner, but QNAP Container station couldn't manage docer-composed containers
 
 # Start Traefik container
+# The Router should NAT forward 80 and 443 port to 40080 and 40443 of the traefik machine
 docker run -d --name reverse_proxy -p 48080:8080 -p 40080:80 -p 40443:443 -v $PWD/traefik.yaml:/etc/traefik/traefik.yaml -v $PWD/dynamic_config.yaml:/etc/traefik/dynamic_config.yaml traefik:latest
 
 # Start MariaDB container for nextcloud
