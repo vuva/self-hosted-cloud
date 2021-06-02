@@ -70,7 +70,7 @@ log:
 #
 # Optional
 #
-#accessLog:
+#accessLog
   # Sets the file path for the access log. If not specified, stdout will be used.
   # Intermediate directories are created if necessary.
   #
@@ -158,8 +158,8 @@ providers:
 certificatesResolvers:
   myresolver:
     acme:
-      email: example@gmail.com
-      storage: acme.json
+      email: example@mail.com
+      storage: /letsencrypt/acme.json
       httpChallenge:
         # used during the challenge
         entryPoint: web
